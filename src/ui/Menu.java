@@ -5,14 +5,18 @@ import java.io.BufferedWriter;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
+
+import model.GridManagement;
 public class Menu {
-	public static BufferedReader br;
-	public static BufferedWriter bw;
+	private BufferedReader br;
+	private BufferedWriter bw;
 	private final static int EXIT_OPTION = 3;
+	private GridManagement gm;
 	
-	public Menu() {
+	public Menu() throws IOException {
 		br=new BufferedReader(new InputStreamReader(System.in));
 		bw=new BufferedWriter(new OutputStreamWriter(System.out));
+		createManagement();
 	}
 	public void startMenu() throws IOException {
 		String menu = getMenuText();
@@ -28,7 +32,7 @@ public class Menu {
 		menu  = "==============================\n";
 		menu += "      LASER BEAM\n";
 		menu += "==============================\n";
-		menu += "1. Star game\n";
+		menu += "1. Start game\n";
 		menu += "2. Leaderboard \n";
 		menu += "3. Exit game\n";
 		return menu;
@@ -46,12 +50,26 @@ public class Menu {
 			default: break;
 		}
 	}
+	public void createManagement() throws IOException{
+		gm=new GridManagement();
+	}
 	private void exitProgram() throws IOException {
 		br.close();
 		bw.close();
 	}
-	private void playGame() {
-		
+	private void playGame() throws IOException {
+		String n="";
+		int r=0;
+		int c=0;
+		int m=0;
+		bw.write("Nickname Rows Columns Mirrors");
+		String line=br.readLine();
+		String parts[]=line.split(" ");
+		n=parts[0];
+		r=Integer.parseInt(parts[1]);
+		c=Integer.parseInt(parts[2]);
+		m=Integer.parseInt(parts[3]);
+		gm.organize(r,c,m);
 	}
 	private void showLeaderboard() {
 		

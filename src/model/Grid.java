@@ -2,18 +2,27 @@ package model;
 
 public class Grid {
 	//Atributes
-	private char letter;
 	private int number;
+	private char letter;
+	private String mirror;
 	private Grid nextGrid;
 	private Grid previousGrid;
 	private Grid upGrid;
 	private Grid downGrid;
 	//Methods
-	public Grid() {
+	public Grid(int n,char l) {
+		number=n;
+		letter=l;
 		nextGrid=null;
 		previousGrid=null;
 		upGrid=null;
 		downGrid=null;
+	}
+	public int getNumber() {
+		return number;
+	}
+	public void setNumber(int number) {
+		this.number = number;
 	}
 	public char getLetter() {
 		return letter;
@@ -21,11 +30,11 @@ public class Grid {
 	public void setLetter(char letter) {
 		this.letter = letter;
 	}
-	public int getNumber() {
-		return number;
+	public String getMirror() {
+		return mirror;
 	}
-	public void setNumber(int number) {
-		this.number = number;
+	public void setMirror(String mirror) {
+		this.mirror = mirror;
 	}
 	public Grid getNextGrid() {
 		return nextGrid;
