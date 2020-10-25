@@ -4,19 +4,27 @@ public class Grid {
 	//Atributes
 	private int number;
 	private char letter;
-	private String mirror;
+	private int numCol;
+	private char mirror;
 	private Grid nextGrid;
 	private Grid previousGrid;
 	private Grid upGrid;
 	private Grid downGrid;
 	//Methods
-	public Grid(int n,char l) {
+	public Grid(int n,char l,int num) {
 		number=n;
 		letter=l;
 		nextGrid=null;
 		previousGrid=null;
 		upGrid=null;
 		downGrid=null;
+		numCol=num;
+	}
+	public int getNumCol() {
+		return numCol;
+	}
+	public void setNumCol(int numCol) {
+		this.numCol = numCol;
 	}
 	public int getNumber() {
 		return number;
@@ -30,10 +38,10 @@ public class Grid {
 	public void setLetter(char letter) {
 		this.letter = letter;
 	}
-	public String getMirror() {
+	public char getMirror() {
 		return mirror;
 	}
-	public void setMirror(String mirror) {
+	public void setMirror(char mirror) {
 		this.mirror = mirror;
 	}
 	public Grid getNextGrid() {
