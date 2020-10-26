@@ -1,24 +1,16 @@
 package ui;
-
-import java.io.BufferedReader;
-import java.io.BufferedWriter;
-import java.io.IOException;
-import java.io.InputStreamReader;
-import java.io.OutputStreamWriter;
 import java.util.Scanner;
-
-import model.Grid;
 import model.GridManagement;
 public class Menu {
 	private Scanner sc;
 	private final static int EXIT_OPTION = 3;
 	private GridManagement gm;
 	
-	public Menu() throws IOException {
+	public Menu() {
 		sc = new Scanner(System.in);
 		createManagement();
 	}
-	public void startMenu() throws IOException {
+	public void startMenu(){
 		String menu = getMenuText();
 		int option;
 		do {
@@ -37,12 +29,12 @@ public class Menu {
 		menu += "3. Exit game";
 		return menu;
 	}
-	private int readOption() throws NumberFormatException, IOException {
+	private int readOption()  {
 		int op;
 		op = Integer.parseInt(sc.nextLine());
 		return op;
 	}
-	private void executeOperation(int option) throws IOException  {
+	private void executeOperation(int option)  {
 		switch(option) {
 			case 1: playGame();   break;
 			case 2: showLeaderboard(); break;
@@ -50,21 +42,20 @@ public class Menu {
 			default: break;
 		}
 	}
-	public void createManagement() throws IOException{
+	public void createManagement() {
 		gm=new GridManagement();
 	}
-	private void exitProgram() throws IOException {
+	private void exitProgram() {
 		sc.close();
 	}
-	private void playGame() throws IOException {
-		String n="";
+	private void playGame()  {
 		int r=0;
 		int c=0;
 		int m=0;
 		System.out.println("Nickname Rows Columns Mirrors");
 		String line=sc.nextLine();;
 		String parts[]=line.split(" ");
-		n=parts[0];
+		String n=parts[0];
 		r=Integer.parseInt(parts[1]);
 		c=Integer.parseInt(parts[2]);
 		m=Integer.parseInt(parts[3]);
