@@ -10,6 +10,7 @@ public class Grid {
 	private Grid previousGrid;
 	private Grid upGrid;
 	private Grid downGrid;
+	private String box;
 	//Methods
 	public Grid(int n,char l,int num) {
 		number=n;
@@ -19,6 +20,13 @@ public class Grid {
 		upGrid=null;
 		downGrid=null;
 		numCol=num;
+		box="[ ]";
+	}
+	public String getBox() {
+		return box;
+	}
+	public void setBox(String box) {
+		this.box = box;
 	}
 	public int getNumCol() {
 		return numCol;

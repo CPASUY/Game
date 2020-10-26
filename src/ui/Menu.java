@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.util.Scanner;
 
+import model.Grid;
 import model.GridManagement;
 public class Menu {
 	private Scanner sc;
@@ -68,6 +69,8 @@ public class Menu {
 		c=Integer.parseInt(parts[2]);
 		m=Integer.parseInt(parts[3]);
 		gm.create(r,c,1,1,m);
+		String msg=gm.parcialMatrix(" ",0,r,c,0);
+		System.out.println(msg);
 	}
 	private void showLeaderboard() {
 		
