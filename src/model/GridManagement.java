@@ -36,8 +36,8 @@ public class GridManagement {
 		}
 	}
 	public void create(int row,int column,int cont,int numCol,int m) {
-		Grid ng=new Grid(cont,(char)65,numCol);
 		if(row>0) {
+			Grid ng=new Grid(cont,(char)65,numCol);
 			if(first==null) {
 				first=ng;
 				createRows(cont,first,column,1,numCol+1);
@@ -54,7 +54,6 @@ public class GridManagement {
 				}
 			}
 		}
-		createRandom(row,column,m,1);
 	}
 	private Grid findNext(Grid g) {
 		if(g.getDownGrid()==null) {
@@ -88,13 +87,18 @@ public class GridManagement {
 		linkRows(current,temp,col,cont+1);
 		}
 	}
-	private void createRandom(int r,int c,int m,int cont) {
+	public void createRandom(int r,int c,int m,int cont) {
 		if(cont<=m) {
 			int numRow= (int) (Math.random() * r) + 1;
 			int numCol= (int) (Math.random() * c) + 1;
 			Grid g =searchRow(numRow,numCol,1,first);
+			if(g.getAddmirror()==false) {
 			addMirror(g);
 			createRandom(r,c,m,cont+1);
+			}
+			else {
+				createRandom(r,c,m,cont);
+			}
 		}
 	}
 	private Grid searchRow(int nr,int nc,int cont,Grid g) {
@@ -124,24 +128,27 @@ public class GridManagement {
 			r=92;
 		}
 		g.setMirror((char)r);
+		g.setAddmirror(true);
 	}
-	public String parcialMatrix(String m,int c,int r,int col,int conC) {
-		String msg=showMatrix(first,m,c,r,col,conC);
+	public String showPlay(String m,int r,int c,int contR,int contC) {
+		String msg="";
+		msg=parcialMatrix(first,m,r,c,contR,contC);
 		return msg;
 	}
-	public String showMatrix(Grid g,String matrix,int contR,int r, int c,int contC) {
+	public String parcialMatrix(Grid g,String m,int r,int c,int contR,int contC) {
 		if(contR<=r) {
-			if(contC<=c) {
-				if(g.getNextGrid()==null) {
-					String m=g.getBox()+"\n";
-					showMatrix(g,m,contR+1,r,c,contC+1);
-				}
-				else {
-					matrix+=g.getBox()+" ";
-					Grid current=g.getNextGrid();
-					showMatrix(current,matrix,contR+1,r,c,contC+1);
-				}
-			}
+			String line=showRows(g,m,c,contC)+"\n";
+			m+=line;
+			return parcialMatrix(g.getDownGrid(),line,r,c,contR+1,contC);
+		}
+		return m;
+	}
+	public String showRows(Grid g,String matrix,int c,int contC) {
+		if(contC<=c) {
+			String line=g.getBox()+" "+g.getMirror();
+			matrix+=line;
+			Grid current=g.getNextGrid();
+			return showRows(current,matrix,c,contC+1);
 		}
 		return matrix;
 	}
@@ -166,23 +173,166 @@ public class GridManagement {
 		}
 	}
 	public void classify(int r,char s,char p) {
+		Grid exit=null;
 		Grid g=searchR(r,s,1,first);
 		if(p==' ') {
-			if(g.getNextGrid()==null || g.getPreviousGrid()==null) {
+			if(g.getNextGrid()==null ) {
 				p='H';
+				exit=movePrev(g);
+			}
+			else if( g.getPreviousGrid()==null) {
+				p='H';
+				exit=moveNext(g);
+			}
+			else if(g.getUpGrid()==null) {
+				p='V';
+				exit=moveDown(g);
 			}
 			else {
 				p='V';
+				exit=moveUp(g);
 			}
-			traversLightning(g,p);
 		}
 		else {
-			traversLightning(g,p);
+			if(p=='V') {
+				if(g.getPreviousGrid()==null && g.getDownGrid()==null) {
+					exit=moveUp(g);
+				}
+				else if(g.getPreviousGrid()==null && g.getUpGrid()==null) {
+					exit=moveDown(g);
+				}
+				else if(g.getNextGrid()==null && g.getDownGrid()==null) {
+					exit=moveUp(g);
+				}
+				else {
+					exit=moveDown(g);
+				}
+			}
+			else {
+				if(g.getPreviousGrid()==null) {
+					exit=moveNext(g);
+				}else {
+					exit=movePrev(g);
+				}
+			}
+		}
+		g.setBox("[S]");
+		exit.setBox("[E]");
+	}
+	public Grid moveNext(Grid g) {
+		Grid ng=null;
+		if(g.getMirror()=='/') {
+			ng=moveUp(g);
+			return ng;
+		}
+		else if(g.getMirror()=='\\') {
+			ng=moveDown(g);
+			return ng;
+		}
+		if(g.getNextGrid()==null) {
+			ng=g;
+			return ng;
+		}
+		else {
+			if(g.getNextGrid().getMirror()=='/') {
+				ng=moveUp(g);
+				return ng;
+			}
+			else if(g.getNextGrid().getMirror()=='\\') {
+				ng=moveDown(g);
+				return ng;
+			}
+			else {
+				ng=moveNext(g.getNextGrid());
+				return ng;
+			}
 		}
 	}
-	public Grid traversLightning(Grid g, char p) {
-		if()
-		
-		return g;
+	public Grid moveUp(Grid g) {
+		Grid ng=null;
+		if(g.getMirror()=='/') {
+			ng=moveNext(g);
+			return ng;
+		}
+		else if(g.getMirror()=='\\') {
+			ng=movePrev(g);
+			return ng;
+		}
+		if(g.getUpGrid()==null) {
+			ng=g;
+			return ng;
+		}
+		else {
+			if(g.getUpGrid().getMirror()=='/') {
+				ng=moveNext(g);
+				return ng;
+			}
+			else if(g.getUpGrid().getMirror()=='\\') {
+				ng=movePrev(g);
+				return ng;
+			}
+			else {
+				ng=moveUp(g.getUpGrid());
+				return ng;
+			}
+		}
+	}
+	public Grid movePrev(Grid g) {
+		Grid ng=null;
+		if(g.getMirror()=='/') {
+			ng=moveDown(g);
+			return ng;
+		}
+		else if(g.getMirror()=='\\') {
+			ng=moveUp(g);
+			return ng;
+		}
+		if(g.getPreviousGrid()==null) {
+			ng=g;
+			return ng;
+		}
+		else {
+			if(g.getPreviousGrid().getMirror()=='/') {
+				ng=moveDown(g);
+				return ng;
+			}
+			else if(g.getPreviousGrid().getMirror()=='\\') {
+				ng=moveUp(g);
+				return ng;
+			}
+			else {
+				ng=movePrev(g.getPreviousGrid());
+				return ng;
+			}
+		}
+	}
+	public Grid moveDown(Grid g) {
+		Grid ng=null;
+		if(g.getMirror()=='/') {
+			ng=movePrev(g);
+			return ng;
+		}
+		else if(g.getMirror()=='\\') {
+			ng=moveNext(g);
+			return ng;
+		}
+		if(g.getDownGrid()==null) {
+			ng=g;
+			return ng;
+		}
+		else {
+			if(g.getDownGrid().getMirror()=='/') {
+				ng=movePrev(g);
+				return ng;
+			}
+			else if(g.getDownGrid().getMirror()=='\\') {
+				ng=moveNext(g);
+				return ng;
+			}
+			else {
+				ng=movePrev(g.getDownGrid());
+				return ng;
+			}
+		}
 	}
 }

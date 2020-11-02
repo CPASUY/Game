@@ -69,34 +69,43 @@ public class Menu {
 			throw new NumbersColumnException();
 		}
 		gm.create(r,c,1,1,m);
-		play(r,c);
+		gm.createRandom(r,c,m,1);
+		play(r,c,1);
 	}
-	private void play(int r, int c) {
-		String msg=gm.parcialMatrix(" ",0,r,c,0);
-		System.out.println(msg);
-		String play=sc.nextLine();
-		if(play.equals("menu") ) {
-			
+	private void play(int r, int c,int cont) {
+		if(cont==1) {
+			String msg=gm.showPlay("",r,c,1,1);
+			System.out.print(msg);
+			play(r,c,cont+1);
 		}
-		else {
-			int n=0;
-			char letter=' ';
-			char pos=' ';
-			int l=play.length();
-			if(play.charAt(l-1)=='H' || play.charAt(l-1)=='V') {
-				pos=play.charAt(l-1);
-				letter=play.charAt(l-2);
-				String num=play.substring(0,l-2);
-				n=Integer.parseInt(num);
-				gm.classify(r, letter,pos);
+		else if(cont==2) {
+			String play=sc.nextLine();
+			if(play.equals("menu") ) {
+				startMenu();
 			}
 			else {
-				letter=play.charAt(l-1);
-				String num=play.substring(0,l-1);
-				n=Integer.parseInt(num);
-				gm.classify(r, letter,pos);
+				int n=0;
+				char letter=' ';
+				char pos=' ';
+				int l=play.length();
+				if(play.charAt(l-1)=='H' || play.charAt(l-1)=='V') {
+					pos=play.charAt(l-1);
+					letter=play.charAt(l-2);
+					String num=play.substring(0,l-2);
+					n=Integer.parseInt(num);
+					gm.classify(n, letter,pos);
+					String msg=gm.showPlay("",r,c,1,1);
+					System.out.print(msg);
 				}
-			play(r,c);
+				else {
+					letter=play.charAt(l-1);
+					String num=play.substring(0,l-1);
+					n=Integer.parseInt(num);
+					gm.classify(n, letter,pos);
+					String msg=gm.showPlay("",r,c,1,1);
+					System.out.print(msg);
+				}
+			}
 		}
 	}
 	private void showLeaderboard() {

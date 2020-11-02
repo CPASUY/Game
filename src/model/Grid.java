@@ -5,6 +5,7 @@ public class Grid {
 	private int number;
 	private char letter;
 	private int numCol;
+	private boolean addmirror;
 	private char mirror;
 	private Grid nextGrid;
 	private Grid previousGrid;
@@ -15,12 +16,20 @@ public class Grid {
 	public Grid(int n,char l,int num) {
 		number=n;
 		letter=l;
+		mirror=' ';
 		nextGrid=null;
 		previousGrid=null;
 		upGrid=null;
 		downGrid=null;
 		numCol=num;
+		addmirror=false;
 		box="[ ]";
+	}
+	public boolean getAddmirror() {
+		return addmirror;
+	}
+	public void setAddmirror(boolean ad) {
+		addmirror = ad;
 	}
 	public String getBox() {
 		return box;
