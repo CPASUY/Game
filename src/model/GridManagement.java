@@ -156,7 +156,7 @@ public class GridManagement {
 		Grid newg=null;
 		if(cont<r) {
 			Grid current=g.getDownGrid();
-			return searchRow(r,c,cont+1,current);
+			return searchR(r,c,cont+1,current);
 		}
 		else {
 			newg=searchC(c,g);
@@ -178,161 +178,187 @@ public class GridManagement {
 		if(p==' ') {
 			if(g.getNextGrid()==null ) {
 				p='H';
-				exit=movePrev(g);
+				exit=goPrev(g);
 			}
 			else if( g.getPreviousGrid()==null) {
 				p='H';
-				exit=moveNext(g);
+				exit=goNext(g);
 			}
 			else if(g.getUpGrid()==null) {
 				p='V';
-				exit=moveDown(g);
+				exit=goDown(g);
 			}
 			else {
 				p='V';
-				exit=moveUp(g);
+				exit=goUp(g);
 			}
 		}
 		else {
 			if(p=='V') {
-				if(g.getPreviousGrid()==null && g.getDownGrid()==null) {
-					exit=moveUp(g);
+				if(g.getDownGrid()==null) {
+					exit=goUp(g);
 				}
-				else if(g.getPreviousGrid()==null && g.getUpGrid()==null) {
-					exit=moveDown(g);
-				}
-				else if(g.getNextGrid()==null && g.getDownGrid()==null) {
-					exit=moveUp(g);
-				}
-				else {
-					exit=moveDown(g);
+				else if( g.getUpGrid()==null) {
+					exit=goDown(g);
 				}
 			}
 			else {
 				if(g.getPreviousGrid()==null) {
-					exit=moveNext(g);
+					exit=goNext(g);
 				}else {
-					exit=movePrev(g);
+					exit=goPrev(g);
 				}
 			}
 		}
 		g.setBox("[S]");
 		exit.setBox("[E]");
 	}
+	public Grid goNext(Grid g) {
+		Grid ng=null;
+		if(g.getAddmirror()==false) {
+			ng=moveNext(g);
+			if(ng.getMirror()=='/') {
+				if(ng.getUpGrid()!=null) {
+					ng=goUp(ng.getUpGrid());
+				}
+				else {
+					return ng;
+				}
+			}
+			else if(ng.getMirror()=='\\'){
+				if(ng.getDownGrid()!=null) {
+					ng=goDown(ng.getDownGrid());
+				}
+			else {
+					return ng;
+				}
+			}
+			else {
+					return ng;
+				}
+			}
+		return ng;
+	}
+	public Grid goPrev(Grid g) {
+		Grid ng=null;
+		if(g.getAddmirror()==false) {
+			ng=movePrev(g);
+			if(ng.getMirror()=='/') {
+				if(ng.getDownGrid()!=null) {
+					ng=goDown(ng.getDownGrid());
+				}
+				else {
+					return ng;
+				}
+			}
+			else if(ng.getMirror()=='\\'){
+				if(ng.getUpGrid()!=null) {
+					ng=goUp(ng.getUpGrid());
+				}
+			else {
+					return ng;
+				}
+			}
+			else {
+					return ng;
+				}
+			}
+		return ng;
+	}
+	public Grid goUp(Grid g) {
+		Grid ng=null;
+		if(g.getAddmirror()==false) {
+			ng=moveUp(g);
+			if(ng.getMirror()=='/') {
+				if(ng.getNextGrid()!=null) {
+					ng=goNext(ng.getNextGrid());
+				}
+				else {
+					return ng;
+				}
+			}
+			else if(ng.getMirror()=='\\'){
+				if(ng.getPreviousGrid()!=null) {
+					ng=goPrev(ng.getPreviousGrid());
+				}
+			else {
+					return ng;
+				}
+			}
+			else {
+					return ng;
+				}
+			}
+		return ng;
+	}
+	public Grid goDown(Grid g) {
+		Grid ng=null;
+		if(g.getAddmirror()==false) {
+			ng=moveDown(g);
+			if(ng.getMirror()=='/') {
+				if(ng.getPreviousGrid()!=null) {
+					ng=goPrev(ng.getPreviousGrid());
+				}
+				else {
+					return ng;
+				}
+			}
+			else if(ng.getMirror()=='\\'){
+				if(ng.getNextGrid()!=null) {
+					ng=goNext(ng.getNextGrid());
+				}
+			else {
+					return ng;
+				}
+			}
+			else {
+					return ng;
+				}
+			}
+		return ng;
+	}
 	public Grid moveNext(Grid g) {
 		Grid ng=null;
-		if(g.getMirror()=='/') {
-			ng=moveUp(g);
-			return ng;
-		}
-		else if(g.getMirror()=='\\') {
-			ng=moveDown(g);
-			return ng;
-		}
-		if(g.getNextGrid()==null) {
+		if(g.getNextGrid()==null || g.getAddmirror()==true) {
 			ng=g;
 			return ng;
 		}
 		else {
-			if(g.getNextGrid().getMirror()=='/') {
-				ng=moveUp(g);
-				return ng;
-			}
-			else if(g.getNextGrid().getMirror()=='\\') {
-				ng=moveDown(g);
-				return ng;
-			}
-			else {
-				ng=moveNext(g.getNextGrid());
-				return ng;
-			}
+			ng=moveNext(g.getNextGrid());
+			return ng;
 		}
 	}
 	public Grid moveUp(Grid g) {
 		Grid ng=null;
-		if(g.getMirror()=='/') {
-			ng=moveNext(g);
-			return ng;
-		}
-		else if(g.getMirror()=='\\') {
-			ng=movePrev(g);
-			return ng;
-		}
-		if(g.getUpGrid()==null) {
+		if(g.getUpGrid()==null || g.getAddmirror()==true ) {
 			ng=g;
 			return ng;
 		}
 		else {
-			if(g.getUpGrid().getMirror()=='/') {
-				ng=moveNext(g);
-				return ng;
-			}
-			else if(g.getUpGrid().getMirror()=='\\') {
-				ng=movePrev(g);
-				return ng;
-			}
-			else {
-				ng=moveUp(g.getUpGrid());
-				return ng;
-			}
+			ng=moveUp(g.getUpGrid());
+			return ng;
 		}
 	}
 	public Grid movePrev(Grid g) {
 		Grid ng=null;
-		if(g.getMirror()=='/') {
-			ng=moveDown(g);
-			return ng;
-		}
-		else if(g.getMirror()=='\\') {
-			ng=moveUp(g);
-			return ng;
-		}
-		if(g.getPreviousGrid()==null) {
+		if(g.getPreviousGrid()==null || g.getAddmirror()==true ) {
 			ng=g;
 			return ng;
 		}
 		else {
-			if(g.getPreviousGrid().getMirror()=='/') {
-				ng=moveDown(g);
-				return ng;
-			}
-			else if(g.getPreviousGrid().getMirror()=='\\') {
-				ng=moveUp(g);
-				return ng;
-			}
-			else {
-				ng=movePrev(g.getPreviousGrid());
-				return ng;
-			}
+			ng=movePrev(g.getPreviousGrid());
+			return ng;
 		}
 	}
 	public Grid moveDown(Grid g) {
 		Grid ng=null;
-		if(g.getMirror()=='/') {
-			ng=movePrev(g);
-			return ng;
-		}
-		else if(g.getMirror()=='\\') {
-			ng=moveNext(g);
-			return ng;
-		}
-		if(g.getDownGrid()==null) {
+		if(g.getDownGrid()==null || g.getAddmirror()==true ) {
 			ng=g;
 			return ng;
 		}
 		else {
-			if(g.getDownGrid().getMirror()=='/') {
-				ng=movePrev(g);
-				return ng;
-			}
-			else if(g.getDownGrid().getMirror()=='\\') {
-				ng=moveNext(g);
-				return ng;
-			}
-			else {
-				ng=movePrev(g.getDownGrid());
-				return ng;
-			}
+			ng=moveDown(g.getDownGrid());
+			return ng;
 		}
 	}
 }
