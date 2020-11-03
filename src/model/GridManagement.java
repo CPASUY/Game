@@ -236,7 +236,25 @@ public class GridManagement {
 			else {
 					return ng;
 				}
+		}
+		else {
+			if(g.getMirror()=='/') {
+				if(g.getUpGrid()!=null) {
+					ng=goUp(g.getUpGrid());
+				}
+				else {
+					return g;
+				}
 			}
+			else {
+				if(g.getDownGrid()!=null) {
+					ng=goDown(g.getDownGrid());
+				}
+			else {
+					return g;
+				}
+			}
+		}
 		return ng;
 	}
 	public Grid goPrev(Grid g) {
@@ -263,6 +281,24 @@ public class GridManagement {
 					return ng;
 				}
 			}
+		else {
+			if(g.getMirror()=='/') {
+				if(g.getDownGrid()!=null) {
+					ng=goDown(g.getDownGrid());
+				}
+				else {
+					return g;
+				}
+			}
+			else {
+				if(g.getUpGrid()!=null) {
+					ng=goUp(g.getUpGrid());
+				}
+			else {
+					return g;
+				}
+			}
+		}
 		return ng;
 	}
 	public Grid goUp(Grid g) {
@@ -289,6 +325,24 @@ public class GridManagement {
 					return ng;
 				}
 			}
+		else {
+			if(g.getMirror()=='/') {
+				if(g.getNextGrid()!=null) {
+					ng=goNext(g.getNextGrid());
+				}
+				else {
+					return g;
+				}
+			}
+			else {
+				if(g.getPreviousGrid()!=null) {
+					ng=goPrev(g.getPreviousGrid());
+				}
+			else {
+					return g;
+				}
+			}
+		}
 		return ng;
 	}
 	public Grid goDown(Grid g) {
@@ -315,6 +369,24 @@ public class GridManagement {
 					return ng;
 				}
 			}
+		else {
+			if(g.getMirror()=='/') {
+				if(g.getPreviousGrid()!=null) {
+					ng=goPrev(g.getPreviousGrid());
+				}
+				else {
+					return g;
+				}
+			}
+			else {
+				if(g.getNextGrid()!=null) {
+					ng=goNext(g.getNextGrid());
+				}
+			else {
+					return g;
+				}
+			}
+		}
 		return ng;
 	}
 	public Grid moveNext(Grid g) {
