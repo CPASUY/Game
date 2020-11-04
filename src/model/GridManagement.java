@@ -1,5 +1,13 @@
 package model;
 
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.ObjectInputStream;
+import java.io.ObjectOutputStream;
+import java.util.ArrayList;
+
 public class GridManagement {
 	//Constants
 		public static final String PLAYERS_FILE_NAME="data/players.bbd";
@@ -7,20 +15,44 @@ public class GridManagement {
 	private UserGame root;
 	private Grid first;
 	//Methods
+	/**GridManagement
+	 */
 	public GridManagement() {
 		first=null;
+		try {
+			loadRoot();
+		}catch(IOException io) {
+			System.err.println("Information could not be loaded");
+		} catch (ClassNotFoundException cf) {
+			cf.printStackTrace();
+		}
 	}
 	public Grid getFirst() {
 		return first;
 	}
-	public void addPlayer(UserGame u) {
+	/**addPlayer
+     *Method to add player
+     * @param n!=null
+     * @param score!=null
+     * @param r!=null
+     * @param c!=null
+     * @param m!=null
+     * */
+	public void addPlayer(String n,int score,int r,int c,int m) throws IOException {
+		UserGame us=new UserGame(n,score,r,c,m);
 		if(root== null) {
-			root = u;
+			root = us;
+			saveRoot();
 		}else {
-			addPlayer(root,u);
+			addPlayer(root,us);
 		}
 	}
-	public void addPlayer(UserGame c,UserGame u) {
+	/**addPlayer
+     *Method to add player
+     * @param c!=null
+     * @param u!=null
+     * */
+	public void addPlayer(UserGame c,UserGame u) throws IOException {
 		if(u.getScore()<=c.getScore()	&&	c.getL()==null) {
 			c.setL(u);
 			u.setF(c);
@@ -34,7 +66,16 @@ public class GridManagement {
 				addPlayer(c.getR(),u);
 			}
 		}
+		saveRoot();
 	}
+	/**create
+     *Method to create the first column of the matrix
+     * @param row!=null
+     * @param column!=null
+     * @param cont!=null
+     * @param numCol!=null
+     * @param m!=null
+     * */
 	public void create(int row,int column,int cont,int numCol,int m) {
 		if(row>0) {
 			Grid ng=new Grid(cont,(char)65,numCol);
@@ -55,6 +96,11 @@ public class GridManagement {
 			}
 		}
 	}
+	/**findNext
+     *Method to find the next celd of one Grid object
+     * @param g!=null
+     * @return Grid g
+     * */
 	private Grid findNext(Grid g) {
 		if(g.getDownGrid()==null) {
 			return g;
@@ -63,6 +109,14 @@ public class GridManagement {
 			return findNext(g.getDownGrid());
 		}
 	}
+	/**createRows
+     *Method to create the rows of the matrix
+     * @param cont!=null
+     * @param g!=null
+     * @param c!=null
+     * @param contCol!=null
+     * @param numCol!=null
+     * */
 	private void createRows(int cont,Grid g,int c,int contCol,int numCol) {
 		if(c>1) {
 			int col=65+contCol;
@@ -78,6 +132,13 @@ public class GridManagement {
 			}	
 		}
 	}
+	/**linkRows
+     *Method to link the rows up and down of the matrix
+     * @param g1!=null
+     * @param g2!=null
+     * @param col!=null
+     * @param cont!=null
+     * */
 	private void linkRows(Grid g1,Grid g2,int col,int cont) {
 		if(cont<col) {
 		Grid current=g1.getNextGrid();
@@ -87,6 +148,13 @@ public class GridManagement {
 		linkRows(current,temp,col,cont+1);
 		}
 	}
+	/**createRandom(
+     *Method to create random numbers for choosing the position of the matrix
+     * @param r!=null
+     * @param c!=null
+     * @param m!=null
+     * @param cont!=null
+     * */
 	public void createRandom(int r,int c,int m,int cont) {
 		if(cont<=m) {
 			int numRow= (int) (Math.random() * r) + 1;
@@ -101,6 +169,14 @@ public class GridManagement {
 			}
 		}
 	}
+	/**searchRow
+     *Method to search the row numbers of the matrix
+     * @param nr!=null
+     * @param nc!=null
+     * @param cont!=null
+     * @param g!=null
+     * @return Grid g
+     * */
 	private Grid searchRow(int nr,int nc,int cont,Grid g) {
 		Grid newg=null;
 		if(cont<nr) {
@@ -112,6 +188,13 @@ public class GridManagement {
 		}
 		return newg;
 	}
+	/**searchCol
+     *Method to search the column numbers of the matrix
+     * @param nc!=null
+     * @param g!=null
+     * @param cont!=null
+     * @return Grid g
+     * */
 	private Grid searchCol(int nc,Grid g,int cont) {
 		if(cont<nc) {
 			Grid current=g.getNextGrid();
@@ -119,6 +202,10 @@ public class GridManagement {
 		}
 		return g;
 	}
+	/**addMirror
+     *Method to add the mirrors in the the matrix
+     * @param g!=null
+     * */
 	public void addMirror(Grid g) {
 		int r = (int)(Math.random()*2);
 		if(r==0) {
@@ -130,11 +217,30 @@ public class GridManagement {
 		g.setMirror((char)r);
 		g.setAddmirror(true);
 	}
+	/**showPlay
+     *Method to show the the matrix
+     * @param m!=null
+     * @param r!=null
+     * @param c!=null
+     * @param contR!=null
+     * @param contC!=null
+     * @return String msg
+     * */
 	public String showPlay(String m,int r,int c,int contR,int contC) {
 		String msg="";
 		msg=parcialMatrix(first,m,r,c,contR,contC);
 		return msg;
 	}
+	/**parcialMatrix
+     *Method to show the rows of the matrix
+     * @param g!=null
+     * @param m!=null
+     * @param r!=null
+     * @param c!=null
+     * @param contR!=null
+     * @param contC!=null
+     * @return String m
+     * */
 	public String parcialMatrix(Grid g,String m,int r,int c,int contR,int contC) {
 		if(contR<=r) {
 			String line=showRows(g,m,c,contC)+"\n";
@@ -143,15 +249,31 @@ public class GridManagement {
 		}
 		return m;
 	}
+	/**showRows
+     *Method to show the columns of the matrix
+     * @param g!=null
+     * @param matrix!=null
+     * @param c!=null
+     * @param contC!=null
+     * @return String matrix
+     * */
 	public String showRows(Grid g,String matrix,int c,int contC) {
 		if(contC<=c) {
-			String line=g.getBox()+" "+g.getMirror();
+			String line=g.getBox()+" ";
 			matrix+=line;
 			Grid current=g.getNextGrid();
 			return showRows(current,matrix,c,contC+1);
 		}
 		return matrix;
 	}
+	/**searchR
+     *Method to search a row wiht the number and the letter
+     *@param r!=null
+     * @param c!=null
+     * @param cont!=null
+     * @param g!=null
+     * @return Grid g
+     * */
 	private Grid searchR(int r,char c,int cont,Grid g) {
 		Grid newg=null;
 		if(cont<r) {
@@ -163,6 +285,12 @@ public class GridManagement {
 		}
 		return newg;
 	}
+	/**searchC
+     *Method to search a column wiht the number and the letter
+     * @param c!=null
+     * @param g!=null
+     * @return Grid g
+     * */
 	private Grid searchC(char c,Grid g) {
 		if(g.getLetter()==c) {
 			return g;
@@ -172,6 +300,12 @@ public class GridManagement {
 			return searchC(c,current);	
 		}
 	}
+	/**clasiffy
+     *Method to clasiffy the movement of the celd
+     * @param r!=null
+     * @param s!=null
+     * @param p!=null
+     * */
 	public void classify(int r,char s,char p) {
 		Grid exit=null;
 		Grid g=searchR(r,s,1,first);
@@ -210,9 +344,18 @@ public class GridManagement {
 				}
 			}
 		}
-		g.setBox("[S]");
-		exit.setBox("[E]");
+		if(exit==g) {
+			exit.setBox("[M]");
+		}else {
+			g.setBox("[S]");
+			exit.setBox("[E]");
+		}
 	}
+	/**goNext
+     *Method to see which direction it takes if it finds a mirror, moving next
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid goNext(Grid g) {
 		Grid ng=null;
 		if(g.getAddmirror()==false) {
@@ -257,6 +400,11 @@ public class GridManagement {
 		}
 		return ng;
 	}
+	/**goPrev
+     *Method to see which direction it takes if it finds a mirror, moving previous
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid goPrev(Grid g) {
 		Grid ng=null;
 		if(g.getAddmirror()==false) {
@@ -301,6 +449,11 @@ public class GridManagement {
 		}
 		return ng;
 	}
+	/**goUp
+     *Method to see which direction it takes if it finds a mirror, moving up
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid goUp(Grid g) {
 		Grid ng=null;
 		if(g.getAddmirror()==false) {
@@ -345,6 +498,11 @@ public class GridManagement {
 		}
 		return ng;
 	}
+	/**goDown
+     *Method to see which direction it takes if it finds a mirror, moving down
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid goDown(Grid g) {
 		Grid ng=null;
 		if(g.getAddmirror()==false) {
@@ -389,6 +547,11 @@ public class GridManagement {
 		}
 		return ng;
 	}
+	/**movePrev
+     *Method to move next in the matrix
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid moveNext(Grid g) {
 		Grid ng=null;
 		if(g.getNextGrid()==null || g.getAddmirror()==true) {
@@ -400,6 +563,11 @@ public class GridManagement {
 			return ng;
 		}
 	}
+	/**movePrev
+     *Method to move up in the matrix
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid moveUp(Grid g) {
 		Grid ng=null;
 		if(g.getUpGrid()==null || g.getAddmirror()==true ) {
@@ -411,6 +579,11 @@ public class GridManagement {
 			return ng;
 		}
 	}
+	/**movePrev
+     *Method to move backwards in the matrix
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid movePrev(Grid g) {
 		Grid ng=null;
 		if(g.getPreviousGrid()==null || g.getAddmirror()==true ) {
@@ -422,6 +595,11 @@ public class GridManagement {
 			return ng;
 		}
 	}
+	/**movePrev
+     *Method to move down in the matrix
+     * @param g!=null
+     * @return Grid g
+     * */
 	public Grid moveDown(Grid g) {
 		Grid ng=null;
 		if(g.getDownGrid()==null || g.getAddmirror()==true ) {
@@ -432,5 +610,162 @@ public class GridManagement {
 			ng=moveDown(g.getDownGrid());
 			return ng;
 		}
+	}
+	/**findMirror(
+     *method to find mirrors
+     * @param num!=null
+     * @param letter!=null
+     * @param inclination!=null
+     * @return bolean find
+     * */
+	public boolean findMirror(int num,char letter,String inclination,boolean find) {
+		boolean accert=false;
+		boolean mirror=false;
+		Grid g=searchR(num,letter,1,first);
+		char m=' ';
+		if(inclination.equals("L")) {
+			m='\\';
+		}else {
+			m='/';
+		}
+		if(g.getAddmirror()==true) {
+			accert=true;
+			if(g.getMirror()==m) {
+				mirror=true;
+			}
+		}
+		if(accert && mirror) {
+			if(g.getMirror()=='/') {
+				g.setBox("[/]");
+				find=true;
+			}
+			else{
+				g.setBox("[\\]");
+				find=true;
+			}
+		}
+		else if(accert && mirror==false) {
+			g.setBox("[*]");
+		}
+		else{
+			g.setBox("[X]");
+		}
+		return find;
+	}
+	/**eraseIntents
+     *method to show good attempts 
+     * @param r!=null
+     * @param c!=null
+     * @param contC!=null
+     * @param contR!=null
+     * */
+	public void eraseIntents(int r,int c,int contC,int contR) {
+		intentsR(first,r,c,contC,contR);
+	}
+	/**intentsR
+     *method to show good attempts in rows
+     * @param g!=null
+     * @param r!=null
+     * @param c!=null
+     * @param contC!=null
+     * @param contR!=null
+     * */
+	private void intentsR(Grid g,int r, int c, int contC, int contR) {
+		if(contR<=r) {
+			intentsC(g,c,contC);
+			intentsR(g.getDownGrid(),r,c,contC,contR+1);
+		}
+	}
+	/**intentsC
+     *method to show good attempts in columns
+     * @param g!=null
+     * @param c!=null
+     * @param contC!=null
+     * */
+	private void intentsC(Grid g, int c,int contC) {
+		if(contC<=c) {
+			if(g.getBox().equals("[/]") || g.getBox().equals("[\\]")) {
+				intentsC(g.getNextGrid(),c,contC+1);
+			}
+			else {
+				g.setBox("[ ]");
+				intentsC(g.getNextGrid(),c,contC+1);
+			}
+		}
+	}
+	/**finishAttemp
+     * Method to clean the the matrix
+     * @param r!=null
+     * @param c!=null
+     * @param contC!=null
+     * @param contR!=null
+     * */
+	public void finishAttemp(int r,int c,int contC,int contR) {
+		finishAttempR(first,r,c,contC,contR);
+	}
+	/**finishAttempR
+     * Method to clean the rows of the matrix
+     * @param g!=null
+     * @param c!=null
+     * @param contC!=null
+     * @param contR!=null
+     * */
+	private void finishAttempR(Grid g,int r, int c, int contC, int contR) {
+		if(contR<=r) {
+			finishAttempC(g,c,contC);
+			finishAttempR(g.getDownGrid(),r,c,contC,contR+1);
+		}
+	}
+	/**finishAttempC
+     * Method to clean the columns of the matrix
+     * @param g!=null
+     * @param c!=null
+     * @param contC!=null
+     * */
+	private void finishAttempC(Grid g, int c,int contC) {
+		if(contC<=c) {
+				g.setBox("[ ]");
+				finishAttempC(g.getNextGrid(),c,contC+1);
+		}
+	}
+	/**saveRoot
+     * Method to save data players scores
+     */
+	public void saveRoot() throws IOException {
+		ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(PLAYERS_FILE_NAME));
+		oos.writeObject(root);
+		oos.close();
+	}
+	/**loadRoot
+     * Method to load data players scores
+     */
+	public void loadRoot() throws IOException, ClassNotFoundException{	
+		File f=new File(PLAYERS_FILE_NAME);
+		if(f.exists()) {
+			ObjectInputStream ois= new ObjectInputStream(new FileInputStream(f));
+			root=(UserGame)ois.readObject();
+			ois.close();
+		}
+	}
+	/**scoreInorden
+     * Method to sort the scores inorden
+     * @return String scores
+     * */
+	public String scoreInorden() {
+		return scoreInorden(root);
+	}
+	/**scoreInorden
+     * Method to sort the scores inorden
+     * @param current!=null
+     * @return String scores
+     * */
+	public String scoreInorden(UserGame current) {
+		String scores = "";
+		if(current!=null) {
+			scores += scoreInorden(current.getR());
+			scores += current.getNickname() + " " + current.getScore() + "\n";
+			scores += scoreInorden(current.getL());
+		}
+		return scores;
 	}
 }
