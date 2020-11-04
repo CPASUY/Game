@@ -1,7 +1,6 @@
 package model;
 
 import java.io.Serializable;
-
 public class UserGame implements Serializable {
 	//Constants
 	private static final long serialVersionUID = 1;

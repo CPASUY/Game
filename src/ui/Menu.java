@@ -118,7 +118,6 @@ public class Menu {
 		if(play.equals("menu")) {
 			cont=cont+1;
 			gm.finishAttemp(r, c, 1, 1);
-			gm.saveRoot();
 			return score;
 		}
 		else if(play.charAt(s-1)=='L' || play.charAt(s-1)=='R') {
@@ -140,7 +139,6 @@ public class Menu {
 			}
 			else {
 				gm.finishAttemp(r, c, 1, 1);
-				gm.saveRoot();
 				return score;
 			}
 		}
