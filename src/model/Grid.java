@@ -13,6 +13,11 @@ public class Grid {
 	private Grid downGrid;
 	private String box;
 	//Methods
+	/**Grid
+	 * @param n!=null
+	 * @param l!=null
+	 * @param num!=null
+	 */
 	public Grid(int n,char l,int num) {
 		number=n;
 		letter=l;

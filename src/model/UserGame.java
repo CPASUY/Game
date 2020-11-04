@@ -15,6 +15,13 @@ public class UserGame implements Serializable {
 	private UserGame f;
 	private UserGame r;
 	//Methods
+	/**UserGame
+	 * @param name!=null
+	 * @param is!=null
+	 * @param n!=null
+	 * @param m!=null
+	 * @param k!=null
+	 */
 	public UserGame(String name, int s,int n,int m,int k) {
 		nickname = name;
 		score = s;

@@ -12,6 +12,9 @@ public class Menu {
 		sc = new Scanner(System.in);
 		createManagement();
 	}
+	/**startMenu
+     * Method for start menu
+     */
 	public void startMenu()  {
 		String menu = getMenuText();
 		int option;
@@ -23,6 +26,10 @@ public class Menu {
 			e.printStackTrace();
 		}
 	}
+	/**getMenuText
+     * Method for get the menu text
+     * @return String menu
+     */
 	private String getMenuText() {
 		String menu;
 		menu  = "==============================\n";
@@ -33,11 +40,18 @@ public class Menu {
 		menu += "3. Exit game";
 		return menu;
 	}
+	/**readOption(
+     * Method for read option
+     */
 	private int readOption()  {
 		int op;
 		op = Integer.parseInt(sc.nextLine());
 		return op;
 	}
+	/**executeOperation
+     * Method for execute operation
+     * @param option!=null
+     */
 	private void executeOperation(int option) throws IOException  {
 		switch(option) {
 			case 1: 
@@ -53,12 +67,21 @@ public class Menu {
 		}
 		startMenu();
 	}
+	/**createManagement
+     * Method for create management
+     */
 	public void createManagement() {
 		gm=new GridManagement();
 	}
+	/**exitProgram
+     * Method for exit program
+     */
 	private void exitProgram() {
 		sc.close();
 	}
+	/**playGame
+     * Method for play the game
+     */
 	private void playGame() throws NumbersColumnException, IOException  {
 		int r=0;
 		int c=0;
@@ -80,6 +103,9 @@ public class Menu {
 		gm.addPlayer(n,score,r,c,m);
 		System.out.println("You score is "+score);
 	}
+	/**play
+     * Method for play 
+     */
 	private int play(int r, int c,int cont,int m,String name,int score) throws IOException {
 		if(cont==1) {
 			String msg=gm.showPlay("",r,c,1,1);
@@ -147,6 +173,9 @@ public class Menu {
 			}
 		}
 	}
+	/**showLeaderboar
+     * Method for show showLeaderboar
+     */
 	private void showLeaderboard() {
 		System.out.println("\n"+gm.scoreInorden());
 	}
