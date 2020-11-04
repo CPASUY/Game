@@ -98,7 +98,7 @@ public class Menu {
 		}
 		gm.create(r,c,1,1,m);
 		gm.createRandom(r,c,m,1);
-		int s=play(r,c,1,m,n,0);
+		int s=play(r,c,1,m,n,0,1);
 		int score=s*r*c*m;
 		gm.addPlayer(n,score,r,c,m);
 		System.out.println("You score is "+score);
@@ -106,18 +106,23 @@ public class Menu {
 	/**play
      * Method for play 
      */
-	private int play(int r, int c,int cont,int m,String name,int score) throws IOException {
-		if(cont==1) {
+	private int play(int r, int c,int cont,int m,String name,int score,int cheat) throws IOException {
+		if(cont==1 ) {
 			String msg=gm.showPlay("",r,c,1,1);
 			System.out.println(name+":"+" "+m+" mirrors remaining");
 			System.out.print(msg);
-			return play(r,c,cont+1,m,name,score);
+			System.out.println("Do you want to use your cheat mode? You will only have this help once");
+			System.out.println("Write 1 for yes, 2 for no");
+			int o=Integer.parseInt(sc.nextLine());
+			if(o==1) {
+				cheatMode(r, c, cont, m, name, score, cheat);
+			}
+			return play(r,c,cont+1,m,name,score,cheat-1);
 		}
 		String play=sc.nextLine();
 		int s=play.length();
 		if(play.equals("menu")) {
 			cont=cont+1;
-			gm.finishAttemp(r, c, 1, 1);
 			return score;
 		}
 		else if(play.charAt(s-1)=='L' || play.charAt(s-1)=='R') {
@@ -135,10 +140,9 @@ public class Menu {
 			System.out.println(msg);
 			gm.eraseIntents(r, c,1,1);
 			if(m!=0) {
-				return play(r,c,cont+1,m,name,score+1);
+				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
 			else {
-				gm.finishAttemp(r, c, 1, 1);
 				return score;
 			}
 		}
@@ -156,7 +160,7 @@ public class Menu {
 				String msg=gm.showPlay("",r,c,1,1);
 				System.out.print(msg);
 				gm.eraseIntents(r,c,1,1);
-				return play(r,c,cont+1,m,name,score+1);
+				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
 			else {
 				letter=play.charAt(s-1);
@@ -167,7 +171,7 @@ public class Menu {
 				System.out.println(name+":"+" "+m+" mirrors remaining");
 				System.out.print(msg);
 				gm.eraseIntents(r,c,1,1);
-				return play(r,c,cont+1,m,name,score+1);
+				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
 		}
 	}
@@ -176,5 +180,12 @@ public class Menu {
      */
 	private void showLeaderboard() {
 		System.out.println("\n"+gm.scoreInorden());
+	}
+	private void cheatMode(int r,int c,int cont,int m,String name,int score,int cheat) throws IOException {
+		long startTime = System.currentTimeMillis();
+		String msg=gm.showCheat("",r,c,1,1);
+		System.out.println(msg);
+		while(System.currentTimeMillis()-startTime<3000) {
+		}
 	}
 }

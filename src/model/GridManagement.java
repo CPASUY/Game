@@ -701,8 +701,10 @@ public class GridManagement {
      * @param contC!=null
      * @param contR!=null
      * */
-	public void finishAttemp(int r,int c,int contC,int contR) {
-		finishAttempR(first,r,c,contC,contR);
+	public String showCheat(String m,int r,int c,int contC,int contR) {
+		String msg="";
+		msg=showCheatR(first,m,r,c,contC,contR);
+		return msg;
 	}
 	/**finishAttempR
      * Method to clean the rows of the matrix
@@ -711,11 +713,13 @@ public class GridManagement {
      * @param contC!=null
      * @param contR!=null
      * */
-	private void finishAttempR(Grid g,int r, int c, int contC, int contR) {
+	private String showCheatR(Grid g,String m,int r, int c, int contC, int contR) {
 		if(contR<=r) {
-			finishAttempC(g,c,contC);
-			finishAttempR(g.getDownGrid(),r,c,contC,contR+1);
+			String line=showCheatC(g,m,c,contC)+"\n";
+			m+=line;
+			return showCheatR(g.getDownGrid(),line,r,c,contC,contR+1);
 		}
+		return m;
 	}
 	/**finishAttempC
      * Method to clean the columns of the matrix
@@ -723,11 +727,25 @@ public class GridManagement {
      * @param c!=null
      * @param contC!=null
      * */
-	private void finishAttempC(Grid g, int c,int contC) {
+	private String showCheatC(Grid g,String m, int c,int contC) {
 		if(contC<=c) {
-				g.setBox("[ ]");
-				finishAttempC(g.getNextGrid(),c,contC+1);
+			if(g.getMirror()=='/') {
+				String line="[/]"+" ";
+				m+=line;
+				return showCheatC(g.getNextGrid(),m,c,contC+1);
+			}
+			else if(g.getMirror()=='\\') {
+				String line="[\\]"+" ";
+				m+=line;
+				return showCheatC(g.getNextGrid(),m,c,contC+1);
+			}
+			else {
+				String line="[ ]"+" ";
+				m+=line;
+				return showCheatC(g.getNextGrid(),m,c,contC+1);
+			}
 		}
+		return m;
 	}
 	/**saveRoot
      * Method to save data players scores
