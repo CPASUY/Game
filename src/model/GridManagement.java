@@ -10,6 +10,8 @@ import java.io.ObjectOutputStream;
 
 public class GridManagement {
 	//Constants
+	/*The rute file of the serializable file
+	 */
 		public static final String PLAYERS_FILE_NAME="data/players.bbd";
 	//Atributes
 	private UserGame root;

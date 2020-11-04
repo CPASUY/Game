@@ -17,7 +17,7 @@ public class UserGame implements Serializable {
 	//Methods
 	/**UserGame
 	 * @param name!=null
-	 * @param is!=null
+	 * @param s!=null
 	 * @param n!=null
 	 * @param m!=null
 	 * @param k!=null
@@ -46,9 +46,6 @@ public class UserGame implements Serializable {
 	}
 	public int getScore() {
 		return score;
-	}
-	public void setScore(int s) {
-		score = s;
 	}
 	public UserGame getL() {
 		return l;
