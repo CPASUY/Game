@@ -694,8 +694,9 @@ public class GridManagement {
 			}
 		}
 	}
-	/**finishAttemp
+	/**showCheat(
      * Method to clean the the matrix
+     * @param m!=null
      * @param r!=null
      * @param c!=null
      * @param contC!=null
@@ -706,9 +707,11 @@ public class GridManagement {
 		msg=showCheatR(first,m,r,c,contC,contR);
 		return msg;
 	}
-	/**finishAttempR
-     * Method to clean the rows of the matrix
+	/**showCheatR
+     * Method to show the ubication of mirrors for 3 seconds
      * @param g!=null
+     * @param m!=null
+     * @param r!=null
      * @param c!=null
      * @param contC!=null
      * @param contR!=null
@@ -721,8 +724,8 @@ public class GridManagement {
 		}
 		return m;
 	}
-	/**finishAttempC
-     * Method to clean the columns of the matrix
+	/**fshowCheatC
+     * Method to show the ubication of mirrors for 3 seconds
      * @param g!=null
      * @param c!=null
      * @param contC!=null

@@ -77,8 +77,10 @@ public class Menu {
      * Method for exit program
      */
 	private void exitProgram() {
+		System.out.println("Remember that you can play as many times as you want crack");
+		System.out.println("Ciao");
 		sc.close();
-	}
+	}	
 	/**playGame
      * Method for play the game
      */
@@ -137,7 +139,8 @@ public class Menu {
 			}
 			System.out.println(name+":"+" "+m+" mirrors remaining");
 			String msg=gm.showPlay("",r,c,1,1);
-			System.out.println(msg);
+			System.out.println(msg);	
+			System.out.flush();
 			gm.eraseIntents(r, c,1,1);
 			if(m!=0) {
 				return play(r,c,cont+1,m,name,score+1,cheat);
@@ -159,6 +162,7 @@ public class Menu {
 				System.out.println(name+":"+" "+m+" mirrors remaining");
 				String msg=gm.showPlay("",r,c,1,1);
 				System.out.print(msg);
+				System.out.flush();
 				gm.eraseIntents(r,c,1,1);
 				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
@@ -170,6 +174,7 @@ public class Menu {
 				String msg=gm.showPlay("",r,c,1,1);
 				System.out.println(name+":"+" "+m+" mirrors remaining");
 				System.out.print(msg);
+				System.out.flush();
 				gm.eraseIntents(r,c,1,1);
 				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
