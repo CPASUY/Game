@@ -16,6 +16,7 @@ public class Menu {
      * Method for start menu
      */
 	public void startMenu()  {
+		clearConsole();
 		String menu = getMenuText();
 		int option;
 		System.out.println(menu);
@@ -56,16 +57,16 @@ public class Menu {
 		switch(option) {
 			case 1: 
 				try{
-					playGame();  
+					playGame(); 
+					startMenu();
 				}catch(NumbersColumnException nce) {
 					System.out.println("The number of columns entered is greater than allowed");
 				}
 			break;
-			case 2: showLeaderboard(); break;
+			case 2: showLeaderboard();startMenu(); break;
 			case 3: exitProgram();  break;
 			default: break;
 		}
-		startMenu();
 	}
 	/**createManagement
      * Method for create management
@@ -79,8 +80,26 @@ public class Menu {
 	private void exitProgram() {
 		System.out.println("Remember that you can play as many times as you want crack");
 		System.out.println("Ciao");
-		sc.close();
-	}	
+	}
+	public final static void clearConsole()
+	{
+	    try
+	    {
+	        final String os = System.getProperty("os.name");
+	        if (os.contains("Windows"))
+	        {
+	            Runtime.getRuntime().exec("cls");
+	        }
+	        else
+	        {
+	            Runtime.getRuntime().exec("clear");
+	        }
+	    }
+	    catch (final Exception e)
+	    {
+	        //  Handle any exceptions.
+	    }
+	}
 	/**playGame
      * Method for play the game
      */
@@ -109,6 +128,7 @@ public class Menu {
      * Method for play 
      */
 	private int play(int r, int c,int cont,int m,String name,int score,int cheat) throws IOException {
+		clearConsole();
 		if(cont==1 ) {
 			String msg=gm.showPlay("",r,c,1,1);
 			System.out.println(name+":"+" "+m+" mirrors remaining");
@@ -143,9 +163,12 @@ public class Menu {
 			System.out.flush();
 			gm.eraseIntents(r, c,1,1);
 			if(m!=0) {
+				clearConsole();
 				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
 			else {
+				clearConsole();
+				System.out.println("CONGRATULATIONS! You win the game");
 				return score;
 			}
 		}
@@ -162,7 +185,7 @@ public class Menu {
 				System.out.println(name+":"+" "+m+" mirrors remaining");
 				String msg=gm.showPlay("",r,c,1,1);
 				System.out.print(msg);
-				System.out.flush();
+				clearConsole();
 				gm.eraseIntents(r,c,1,1);
 				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
@@ -174,7 +197,7 @@ public class Menu {
 				String msg=gm.showPlay("",r,c,1,1);
 				System.out.println(name+":"+" "+m+" mirrors remaining");
 				System.out.print(msg);
-				System.out.flush();
+				clearConsole();
 				gm.eraseIntents(r,c,1,1);
 				return play(r,c,cont+1,m,name,score+1,cheat);
 			}
@@ -184,6 +207,8 @@ public class Menu {
      * Method for show showLeaderboar
      */
 	private void showLeaderboard() {
+		System.out.println("SCORES");
+		System.out.println("=============");
 		System.out.println("\n"+gm.scoreInorden());
 	}
 	private void cheatMode(int r,int c,int cont,int m,String name,int score,int cheat) throws IOException {

@@ -774,19 +774,19 @@ public class GridManagement {
      * @return String scores
      * */
 	public String scoreInorden() {
-		return scoreInorden(root);
+		return scoreInorden(root,1);
 	}
 	/**scoreInorden
      * Method to sort the scores inorden
      * @param current!=null
      * @return String scores
      * */
-	public String scoreInorden(UserGame current) {
+	public String scoreInorden(UserGame current,int n) {
 		String scores = "";
 		if(current!=null) {
-			scores += scoreInorden(current.getR());
-			scores += current.getNickname() + " " + current.getScore() + "\n";
-			scores += scoreInorden(current.getL());
+			scores += scoreInorden(current.getR(),n+1);
+			scores += n+". "+current.getNickname() +"--> "+" Score: " + current.getScore() + " Rows: "+current.getRows()+" Columns: "+current.getColumn()+" Mirrors: "+current.getMirror()+ "\n";
+			scores += scoreInorden(current.getL(),n+1);
 		}
 		return scores;
 	}
